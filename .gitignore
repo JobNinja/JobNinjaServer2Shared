@@ -1,3 +1,12 @@
+bin/
+lib/
+dist/
+include/
+share/
+*.egg-info
+.idea
+/.project
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
