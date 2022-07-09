@@ -7,20 +7,14 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setuptools.setup(
-    name='CloudWatchClient',
+    name='JobNinjaServer2Shared',
     version='0.0.1',
-    scripts=['cloud_watch_client.py'],
     author="JobNinjaServer",
     author_email="it@jobninja.com",
-    description="JobNinja CloudWatch Client",
+    description="Shared file for JobNinjaServer2 and HR4YOUImporter",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yorubadeveloper/cloudwatchclient",
+    url="https://github.com/lolobosse/JobNinjaServer2Shared",
     packages=setuptools.find_packages(),
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
     install_requires=requirements
 )
