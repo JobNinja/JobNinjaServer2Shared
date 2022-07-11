@@ -1,0 +1,1 @@
+# Shared file for JobNinjaServer2 and HR4YOUImporter
