@@ -1,11 +1,19 @@
+import os
 import sys
 import logging
 
 import boto3
 from botocore.client import Config
 
-AWS_ACCESS_KEY_ID = "AKIAZ3KO4D6AB5E4XN4D"
-AWS_ACCESS_KEY_SECRET = "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"
+try:
+    from configs import dev_config
+    AWS_ACCESS_KEY_ID = dev_config.CLOUDWATCH_AWS_ACCESS_KEY_ID
+    AWS_ACCESS_KEY_SECRET = dev_config.CLOUDWATCH_AWS_ACCESS_KEY_SECRET
+except ImportError:
+    from dotenv import load_dotenv
+    load_dotenv()
+    AWS_ACCESS_KEY_ID = os.getenv('CLOUDWATCH_AWS_ACCESS_KEY_ID')
+    AWS_ACCESS_KEY_SECRET = os.getenv('CLOUDWATCH_AWS_ACCESS_KEY_SECRET')
 AWS_CLOUD_WATCH_REGION = "eu-central-1"
 
 DEBUG_AWS_CLOUD_WATCH_REGION = "af-south-1"
@@ -234,6 +242,3 @@ class CloudWatchClient:
         handler.setFormatter(formatter)
         my_logger.addHandler(handler)
         return my_logger
-
-
-
