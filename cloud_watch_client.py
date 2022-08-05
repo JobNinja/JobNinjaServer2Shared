@@ -192,12 +192,13 @@ class CloudWatchClient:
                 f'Request config: {my_conf}')
             if self._raise_exceptions:
                 raise e
+            return False
         else:
             request_id = resp.get('ResponseMetadata', {}).get('RequestId')
             existing = len([a for a in resp.get('MetricAlarms') if a.get('AlarmName') == full_alarm_name]) > 0
             self._logger.info(f'CloudWatchClient::_alarm_existing() {"DEBUG_MODE" if self._debug else ""} - OK  '
                               f'alarm name: {full_alarm_name}, existing: {existing}, request_id: {request_id}, request config: {my_conf}')
-        return existing
+            return existing
 
     def _normalise_string(self, val_string):
         line = val_string.replace("ä", "ae").replace("Ä", "Äe") \
