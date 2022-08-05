@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name='JobNinjaServer2Shared',
-    version='0.0.2',
+    version='0.0.3',
     author="JobNinjaServer",
     author_email="it@jobninja.com",
     description="Shared file for JobNinjaServer2 and HR4YOUImporter",
