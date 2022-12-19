@@ -96,20 +96,32 @@ class CloudWatchClient:
         if update_if_exists or not alarm_exists:
             # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudwatch.html#CloudWatch.Client.put_metric_alarm
             my_conf = dict(
-                Namespace=self._namespace,
                 AlarmName=full_alarm_name,
-                # AlarmDescription='string',
-                MetricName=metric_name,
-                Statistic='Average',  # 'SampleCount' | 'Average' | 'Sum' | 'Minimum' | 'Maximum',
-                # ExtendedStatistic='string',
-                Dimensions=self._get_dimensions_as_list(dimensions),
-                Period=60 * 60 * 24,
-                Unit=unit or self._unit,  # 'Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|'Terabits/Second'|'Count/Second'|'None',
+                Metrics=[
+                    dict(
+                        Id="m1",
+                        ReturnData=False,
+                        MetricStat=dict(
+                            Metric=dict(
+                                MetricName=metric_name,
+                                Namespace=self._namespace,
+                                Dimensions=self._get_dimensions_as_list(dimensions),
+                                ),
+                            Stat='Average',
+                            Period=60 * 60 * 24,
+                        ),
+                    ),
+                    dict(
+                        Id=f'{metric_name}_plus_missing_data',
+                        ReturnData=True,
+                        Expression='FILL(m1, 0)',
+                        Label=f'{metric_name} and setting 0 for missing data to set alarm faster'
+                    )
+                ],
                 EvaluationPeriods=1,
                 DatapointsToAlarm=1,
                 Threshold=threshold,
-                ComparisonOperator='GreaterThanThreshold',
-                # 'GreaterThanOrEqualToThreshold' | 'GreaterThanThreshold' | 'LessThanThreshold' | 'LessThanOrEqualToThreshold' | 'LessThanLowerOrGreaterThanUpperThreshold' | 'LessThanLowerThreshold' | 'GreaterThanUpperThreshold',
+                ComparisonOperator='GreaterThanUpperThreshold',
                 TreatMissingData='breaching',  # breaching | notBreaching | ignore | missing
             )
             my_conf = {**my_conf, **self._alarm_config, **additional_params}
