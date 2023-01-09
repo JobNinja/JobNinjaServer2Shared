@@ -153,13 +153,19 @@ class CloudWatchClient:
         res = []
         my_conf = dict(
             StateValue=state,
+            MaxRecords=100
         )
         if self._namespace:
             # Cloud watch does not accept an empty sting for AlarmNamePrefix
             my_conf['AlarmNamePrefix'] = self._get_full_normalized_alarm_name('')
         try:
-            resp = self._client.describe_alarms(**my_conf)
-            res = resp.get('MetricAlarms')
+            resp = None
+            next_token = None
+            while resp is None or next_token is not None:
+                resp = self._client.describe_alarms(**my_conf)
+                res.extend(resp.get('MetricAlarms', []))
+                next_token = resp.get('NextToken')
+                my_conf['NextToken'] = next_token
         except Exception as e:
             self._logger.exception(
                 f'CloudWatchClient::delete_alarm() {"DEBUG_MODE" if self._debug else ""} - EXCEPTION: {e}\n'
