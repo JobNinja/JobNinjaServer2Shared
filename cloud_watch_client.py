@@ -228,6 +228,8 @@ class CloudWatchClient:
         return [{key_name: k, 'Value': v} for k, v in my_dict.items()]
 
     def _get_full_normalized_alarm_name(self, alarm_name):
+        if not self._namespace:
+            return self._normalise_string(alarm_name)
         return f"{self._namespace}.{self._normalise_string(alarm_name)}"
 
     def _get_logger(self):
