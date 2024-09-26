@@ -17,6 +17,7 @@ class CloudWatchClient:
     """
     _client = None
     _logger = None
+    _logger_default = None
     _raise_exceptions = False
 
     def __init__(self, namespace='', metric_dimensions={}, alarm_config={},
@@ -38,7 +39,7 @@ class CloudWatchClient:
         self._unit = unit
         self._debug = debug_mode
         self._raise_exceptions = raise_exceptions
-        self._logger = logger or self._get_logger()
+        self._logger = logger or self._get_default_logger()
 
         if self._client is None:
             self._client = boto3.client(
@@ -232,12 +233,14 @@ class CloudWatchClient:
             return self._normalise_string(alarm_name)
         return f"{self._namespace}.{self._normalise_string(alarm_name)}"
 
-    def _get_logger(self):
-        my_logger = logging.getLogger('CloudWatchClient')
-        my_logger.setLevel(logging.DEBUG)
-        handler = logging.StreamHandler(sys.stdout)
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        my_logger.addHandler(handler)
-        return my_logger
+    def _get_default_logger(self):
+        if self._logger_default is None:
+            my_logger = logging.getLogger('CloudWatchClient')
+            my_logger.setLevel(logging.DEBUG)
+            handler = logging.StreamHandler(sys.stdout)
+            handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            handler.setFormatter(formatter)
+            my_logger.addHandler(handler)
+            self._logger_default = my_logger
+        return self._logger_default
