@@ -208,7 +208,7 @@ class CloudWatchClient:
             return existing
 
     def _normalise_string(self, val_string):
-        line = val_string.replace("ä", "ae").replace("Ä", "Äe") \
+        line =str(val_string).replace("ä", "ae").replace("Ä", "Äe") \
             .replace("ö", "oe").replace("Ö", "oe") \
             .replace("ü", "ue").replace("Ü", "Ue") \
             .replace("ß", "ss")
