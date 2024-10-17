@@ -17,7 +17,6 @@ class CloudWatchClient:
     """
     _client = None
     _logger = None
-    _logger_default = None
     _raise_exceptions = False
 
     def __init__(self, namespace='', metric_dimensions={}, alarm_config={},
@@ -32,6 +31,8 @@ class CloudWatchClient:
             unit: (str, default: 'Unit') Set a default unit for this client. Note: Needs to be one of AWS pre-defined unit types.
             debug_mode: (boolean, default: False) If set to True, all data is submitted to aws region "af-south-1" (CapeTown)
             raise_exceptions: (boolean, default: False) If False, no exceptions will be raised from submit_value(). Exceptions are logged only.
+            AWS_ACCESS_KEY_ID: (str) AWS access key id - Shared between all instances!! - Set it once in the first instance
+            AWS_ACCESS_KEY_SECRET: (str) AWS access key secret - Shared between all instances!! - Set it once in the first instance
         """
         self._namespace = self._normalise_string(namespace)
         self._metric_dimensions = self._normalise_dimensions(metric_dimensions)
@@ -39,15 +40,19 @@ class CloudWatchClient:
         self._unit = unit
         self._debug = debug_mode
         self._raise_exceptions = raise_exceptions
-        self._logger = logger or self._get_default_logger()
+        self._logger = logger or self._get_logger()
 
-        if self._client is None:
-            self._client = boto3.client(
+        # This is dirty!
+        # Users might not expect, that all instances share the same boto3.client
+        # and passing other creaditals to later instances is futile.
+        if CloudWatchClient._client is None:
+            CloudWatchClient._client = boto3.client(
                 'cloudwatch',
                 aws_access_key_id=AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=AWS_ACCESS_KEY_SECRET,
                 config=Config(region_name=AWS_CLOUD_WATCH_REGION if not self._debug else DEBUG_AWS_CLOUD_WATCH_REGION)
             )
+        self._client = CloudWatchClient._client
 
     def submit_value(self, metric_name, val, dimensions=None, unit=None, additional_params={}):
         """
