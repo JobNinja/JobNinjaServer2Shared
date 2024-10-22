@@ -40,7 +40,7 @@ class CloudWatchClient:
         self._unit = unit
         self._debug = debug_mode
         self._raise_exceptions = raise_exceptions
-        self._logger = logger or self._get_logger()
+        self._logger = logger or self._get_default_logger()
 
         # This is dirty!
         # Users might not expect, that all instances share the same boto3.client
