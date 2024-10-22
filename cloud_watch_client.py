@@ -16,7 +16,7 @@ class CloudWatchClient:
     https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
     """
     _client = None
-    _logger = None
+    _logger_default = None
     _raise_exceptions = False
 
     def __init__(self, namespace='', metric_dimensions={}, alarm_config={},
@@ -40,7 +40,7 @@ class CloudWatchClient:
         self._unit = unit
         self._debug = debug_mode
         self._raise_exceptions = raise_exceptions
-        self._logger = logger or self._get_default_logger()
+        self._logger = logger or CloudWatchClient._get_default_logger()
 
         # This is dirty!
         # Users might not expect, that all instances share the same boto3.client
@@ -174,7 +174,7 @@ class CloudWatchClient:
                 my_conf['NextToken'] = next_token
         except Exception as e:
             self._logger.exception(
-                f'CloudWatchClient::delete_alarm() {"DEBUG_MODE" if self._debug else ""} - EXCEPTION: {e}\n'
+                f'CloudWatchClient::get_alarms() {"DEBUG_MODE" if self._debug else ""} - EXCEPTION: {e}\n'
                 f'Request config: {my_conf}')
             if self._raise_exceptions:
                 raise e
@@ -238,8 +238,9 @@ class CloudWatchClient:
             return self._normalise_string(alarm_name)
         return f"{self._namespace}.{self._normalise_string(alarm_name)}"
 
-    def _get_default_logger(self):
-        if self._logger_default is None:
+    @staticmethod
+    def _get_default_logger():
+        if CloudWatchClient._logger_default is None:
             my_logger = logging.getLogger('CloudWatchClient')
             my_logger.setLevel(logging.DEBUG)
             handler = logging.StreamHandler(sys.stdout)
@@ -247,5 +248,5 @@ class CloudWatchClient:
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             handler.setFormatter(formatter)
             my_logger.addHandler(handler)
-            self._logger_default = my_logger
-        return self._logger_default
+            CloudWatchClient._logger_default = my_logger
+        return CloudWatchClient._logger_default
