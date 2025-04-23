@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setuptools.setup(
-    name='JobNinjaServer2Shared',
+    name='jn_tools',
     version='0.0.1',
     author="JobNinjaServer",
     author_email="it@jobninja.com",
