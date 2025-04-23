@@ -15,7 +15,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/lolobosse/JobNinjaServer2Shared",
-    packages=setuptools.find_packages(),
     py_modules=["cloud_watch_client"],
     install_requires=requirements
 )
