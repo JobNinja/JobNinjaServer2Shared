@@ -1,7 +1,8 @@
-# Shared file for JobNinjaServer2 and HR4YOUImporter
+# Shared files for python services
+Used in JobNinjaServer2, HR4YOUImporter, SalesAutomation.
 
 ## Deployment and usage
-Add the package to you dependencies list.
+Add the package to your dependencies list.
 ```
 git+https://github.com/JobNinja/JobNinjaServer2Shared@main#egg=jn_tools
 ```
@@ -13,7 +14,7 @@ Don't install the package in the editable mode (-e) in production.
 
 ## Development
 To debug the package in your dev evnironment, do the following:
-- Remove the package from your dev environment via `pip uninstall jn_tools`
+- Remove the package from your dev environment via `pip uninstall jn_tools`.
 - Clone the repo and change into the directory.
-- Install the package in editable mode via `pip install -e .`.
+- Install the package in editable mode via `pip install -e . `.
 - Check if the package is installed via `pip show jn_tools`. The location should point to the cloned repo.
