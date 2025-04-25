@@ -16,5 +16,5 @@ Don't install the package in the editable mode (-e) in production.
 To debug the package in your dev evnironment, do the following:
 - Remove the package from your dev environment via `pip uninstall jn_tools`.
 - Clone the repo and change into the directory.
-- Install the package in editable mode via `pip install -e`.
+- Install the package in editable mode via `pip install -e . `.
 - Check if the package is installed via `pip show jn_tools`. The location should point to the cloned repo.
