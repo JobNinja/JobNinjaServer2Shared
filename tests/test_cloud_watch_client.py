@@ -1,11 +1,4 @@
-import sys
-import os
-import time
-
-# Add the parent directory to the system path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from cloud_watch_client import CloudWatchClient
+from jn_tools.cloud_watch_client import CloudWatchClient
 
 # Initialize the CloudWatchClient in debug mode
 client = CloudWatchClient(
@@ -23,5 +16,3 @@ client.submit_value(
     dimensions={'Instance': 'i-1234567890abcdef0'},
     unit='Count'
 )
-
-
