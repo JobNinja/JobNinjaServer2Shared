@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jobninja-tools"
-description = "Shared utilities for JobNinja services (CloudWatch client and helpers)."
+description = "Shared utilities for JobNinja services."
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "Proprietary" }
