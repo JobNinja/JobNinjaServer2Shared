@@ -1,6 +1,6 @@
 # jobninja-tools
 
-Shared utilities for JobNinja services. Used in JobNinjaServer2, HR4YOUImporter, and SalesAutomation.
+Shared utilities for JobNinja services.
 
 ## Install
 
@@ -10,12 +10,6 @@ From PyPI (once published):
 pip install jobninja-tools
 # or
 uv add jobninja-tools
-```
-
-From the GitHub source (current method used by existing dependants):
-
-```bash
-pip install "git+https://github.com/JobNinja/JobNinjaServer2Shared@main#egg=jobninja-tools"
 ```
 
 Import name is `jn_tools`:
