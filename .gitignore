@@ -136,3 +136,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vscode/
+.idea/
+
+# uv
+.venv/
+
+# hatch-vcs generated
+jn_tools/_version.py
+
+# build output
+dist/
+build/
+*.egg-info/

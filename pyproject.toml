@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jobninja-tools"
+description = "Shared utilities for JobNinja services."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "Proprietary" }
+authors = [{ name = "JobNinja", email = "devops@jobninja.com" }]
+keywords = ["jobninja", "cloudwatch", "aws"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "boto3",
+    "botocore",
+    "python-dotenv",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/JobNinja/JobNinjaServer2Shared"
+Repository = "https://github.com/JobNinja/JobNinjaServer2Shared"
+Issues = "https://github.com/JobNinja/JobNinjaServer2Shared/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-mock>=3.12",
+    "ruff>=0.6",
+    "pre-commit>=3.7",
+    "build>=1.2",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "jn_tools/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["jn_tools"]
+
+[tool.hatch.build.targets.sdist]
+include = ["jn_tools", "README.md", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"jn_tools/cloud_watch_client.py" = ["E501", "B006"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
