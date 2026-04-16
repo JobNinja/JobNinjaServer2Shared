@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "jobninja-tools"
 description = "Shared utilities for JobNinja services."
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 license = { text = "Proprietary" }
 authors = [{ name = "JobNinja", email = "devops@jobninja.com" }]
 keywords = ["jobninja", "cloudwatch", "aws"]
@@ -14,6 +14,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries",
 ]
@@ -52,7 +55,7 @@ include = ["jn_tools", "README.md", "pyproject.toml"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py313"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
