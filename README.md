@@ -18,6 +18,21 @@ Import name is `jn_tools`:
 from jn_tools.cloud_watch_client import CloudWatchClient
 ```
 
+### Job runs (Better Stack alerts)
+
+Counts finished job runs as the OpenTelemetry counter `jn.job.runs`, labelled `job`
+and `status` (`success`, `failure`, `skipped`). Pass your own meter:
+
+```python
+from jn_tools.job_runs import JobRuns
+
+runs = JobRuns(meter)
+runs.record("import_leads", JobRuns.status_for(exit_code))
+```
+
+The alerts on it live in JobNinjaInfra `modules/betterstack`. Don't rename the metric
+or its labels without updating them.
+
 ## Development
 
 Requires Python 3.13 and [uv](https://docs.astral.sh/uv/).
