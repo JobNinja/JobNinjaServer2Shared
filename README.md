@@ -33,6 +33,19 @@ runs.record("import_leads", JobRuns.status_for(exit_code))
 The alerts on it live in JobNinjaInfra `modules/betterstack`. Don't rename the metric
 or its labels without updating them.
 
+### Job values (Better Stack alerts)
+
+Records a value a job reports, such as a count or a ratio, as the OpenTelemetry gauge
+`jn.job.value`, labelled `job` and `metric`:
+
+```python
+from jn_tools.job_values import JobValues
+
+JobValues(meter).record("clean_import", "cleaned_jobs", cleaned)
+```
+
+The same rules as `jn.job.runs` apply to its alerts.
+
 ## Development
 
 Requires Python 3.13 and [uv](https://docs.astral.sh/uv/).
