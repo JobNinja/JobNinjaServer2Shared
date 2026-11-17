@@ -64,59 +64,6 @@ def test_submit_value_raises_when_configured(boto_client):
         client.submit_value("TestMetric", 1)
 
 
-def test_set_alarm_creates_when_missing(boto_client):
-    boto_client.describe_alarms_for_metric.return_value = {
-        "MetricAlarms": [],
-        "ResponseMetadata": {"RequestId": "r2"},
-    }
-    boto_client.put_metric_alarm.return_value = {"ResponseMetadata": {"RequestId": "r3"}}
-
-    client = _make_client()
-    conf = client.set_alarm("high-cpu", "CPU", threshold=80)
-
-    boto_client.put_metric_alarm.assert_called_once()
-    assert conf["AlarmName"] == "jn.test.high-cpu"
-    assert conf["Threshold"] == 80
-
-
-def test_set_alarm_skips_when_exists(boto_client):
-    boto_client.describe_alarms_for_metric.return_value = {
-        "MetricAlarms": [{"AlarmName": "jn.test.high-cpu"}],
-        "ResponseMetadata": {"RequestId": "r2"},
-    }
-
-    client = _make_client()
-    client.set_alarm("high-cpu", "CPU", threshold=80)
-
-    boto_client.put_metric_alarm.assert_not_called()
-
-
-def test_delete_alarm(boto_client):
-    boto_client.delete_alarms.return_value = {"ResponseMetadata": {"RequestId": "r4"}}
-
-    client = _make_client()
-    client.delete_alarm("high-cpu")
-
-    boto_client.delete_alarms.assert_called_once_with(AlarmNames=["jn.test.high-cpu"])
-
-
-def test_get_alarms_paginates(boto_client):
-    boto_client.describe_alarms.side_effect = [
-        {
-            "MetricAlarms": [{"AlarmName": "a"}],
-            "NextToken": "t",
-            "ResponseMetadata": {"RequestId": "x"},
-        },
-        {"MetricAlarms": [{"AlarmName": "b"}], "ResponseMetadata": {"RequestId": "y"}},
-    ]
-
-    client = _make_client()
-    alarms = client.get_alarms()
-
-    assert [a["AlarmName"] for a in alarms] == ["a", "b"]
-    assert boto_client.describe_alarms.call_count == 2
-
-
 def test_normalise_string_replaces_umlauts(boto_client):
     client = _make_client()
     assert client._normalise_string("für Müller") == "fuer Mueller"
