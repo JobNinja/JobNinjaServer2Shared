@@ -31,6 +31,7 @@ class CloudWatchClient:
         raise_exceptions=False,
         AWS_ACCESS_KEY_ID="",
         AWS_ACCESS_KEY_SECRET="",
+        AWS_ENDPOINT_URL=None,
     ):
         """
         Initialize client before calling any methods
@@ -43,6 +44,7 @@ class CloudWatchClient:
             raise_exceptions: (boolean, default: False) If False, no exceptions will be raised from submit_value(). Exceptions are logged only.
             AWS_ACCESS_KEY_ID: (str) AWS access key id - Shared between all instances!! - Set it once in the first instance
             AWS_ACCESS_KEY_SECRET: (str) AWS access key secret - Shared between all instances!! - Set it once in the first instance
+            AWS_ENDPOINT_URL: (str, default: None) AWS CloudWatch endpoint - Shared between all instances!! - Set it once in the first instance
         """
         self._namespace = self._normalise_string(namespace)
         self._metric_dimensions = self._normalise_dimensions(metric_dimensions)
@@ -60,6 +62,7 @@ class CloudWatchClient:
                 "cloudwatch",
                 aws_access_key_id=AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=AWS_ACCESS_KEY_SECRET,
+                endpoint_url=AWS_ENDPOINT_URL,
                 config=Config(
                     region_name=AWS_CLOUD_WATCH_REGION
                     if not self._debug
